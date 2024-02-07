@@ -12,7 +12,7 @@ const Modal = ({ url, closeModal }) => {
     return () => {
       document.removeEventListener('keydown', addCloseEvent);
     };
-  }, []);
+  });
 
   const closeOnClickOutside = ({ target }) => {
     target.className === 'Overlay' && closeModal();
