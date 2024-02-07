@@ -3,16 +3,16 @@ import { useEffect } from 'react';
 
 const Modal = ({ url, closeModal }) => {
   useEffect(() => {
+    const addCloseEvent = event => {
+      event.key === 'Escape' && closeModal();
+    };
+
     document.addEventListener('keydown', addCloseEvent);
 
     return () => {
       document.removeEventListener('keydown', addCloseEvent);
     };
   }, []);
-
-  function addCloseEvent(event) {
-    event.key === 'Escape' && closeModal();
-  }
 
   const closeOnClickOutside = ({ target }) => {
     target.className === 'Overlay' && closeModal();

@@ -20,28 +20,28 @@ const App = () => {
   const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
+    const getImages = async () => {
+      try {
+        setIsLoading(true);
+        const data = await imagesService.retreiveImages(page, searchedQuery);
+
+        if (data.hits.length === 0) {
+          throw new Error(
+            `We are sorry. There is no data for your searched term: "${searchedQuery}"`
+          );
+        }
+
+        setImages(prev => [...prev, ...data.hits]);
+        setTotalImages(data.totalHits);
+      } catch ({ message }) {
+        setError(message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     searchedQuery.length > 0 && getImages();
   }, [searchedQuery, page]);
-
-  async function getImages() {
-    try {
-      setIsLoading(true);
-      const data = await imagesService.retreiveImages(page, searchedQuery);
-
-      if (data.hits.length === 0) {
-        throw new Error(
-          `We are sorry. There is no data for your searched term: "${searchedQuery}"`
-        );
-      }
-
-      setImages(prev => [...prev, ...data.hits]);
-      setTotalImages(data.totalHits);
-    } catch ({ message }) {
-      setError(message);
-    } finally {
-      setIsLoading(false);
-    }
-  }
 
   const onFormSubmit = searchedTerm => {
     setSearchedQuery(searchedTerm);
